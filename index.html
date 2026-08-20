@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulador de jogadas de vôlei com placar, rodízio e histórico em tempo real.">
+
+    <title>🏐 Desafio do Vôlei</title>
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="titulo-wrap">
+            <span class="tag">Simulador ao vivo</span>
+            <h1>🏐 Desafio do Vôlei</h1>
+            <p>Organize a sequência, faça os pontos e viva cada rally como um grande campeonato.</p>
+        </div>
+
+        <button id="btnReiniciar" class="btn btn-perigo">
+            🔄 Reiniciar partida
+        </button>
+    </header>
+
+    <main class="container">
+        <section class="painel-placar" aria-label="Placar da partida">
+            <div class="time time-a">
+                <span class="nome-time">TIME A</span>
+                <strong id="placarA">0</strong>
+            </div>
+
+            <div class="informacoes-jogo">
+                <span id="setAtual" class="badge-set">SET 1</span>
+                <span id="statusJogo">Aguardando saque</span>
+            </div>
+
+            <div class="time time-b">
+                <span class="nome-time">TIME B</span>
+                <strong id="placarB">0</strong>
+            </div>
+        </section>
+
+        <section class="area-quadra">
+            <div class="placar-mini">
+                <span id="sacandoTexto">🏐 Sacando: Time A</span>
+            </div>
+
+            <div class="quadra" aria-label="Quadra de vôlei">
+                <div class="lado lado-a">
+                    <div class="jogador posicao" data-posicao="4">
+                        <span class="numero">4</span>
+                        <span class="tipo">Ataque Esq.</span>
+                        <input type="text" id="pos4" value="Jogador 4" maxlength="20">
+                    </div>
+
+                    <div class="jogador posicao" data-posicao="3">
+                        <span class="numero">3</span>
+                        <span class="tipo">Levantador</span>
+                        <input type="text" id="pos3" value="Jogador 3" maxlength="20">
+                    </div>
+
+                    <div class="jogador posicao" data-posicao="2">
+                        <span class="numero">2</span>
+                        <span class="tipo">Ataque Dir.</span>
+                        <input type="text" id="pos2" value="Jogador 2" maxlength="20">
+                    </div>
+
+                    <div class="jogador posicao" data-posicao="5">
+                        <span class="numero">5</span>
+                        <span class="tipo">Defesa Esq.</span>
+                        <input type="text" id="pos5" value="Jogador 5" maxlength="20">
+                    </div>
+
+                    <div class="jogador posicao" data-posicao="6">
+                        <span class="numero">6</span>
+                        <span class="tipo">Defesa Meio</span>
+                        <input type="text" id="pos6" value="Jogador 6" maxlength="20">
+                    </div>
+
+                    <div class="jogador posicao" data-posicao="1">
+                        <span class="numero">1</span>
+                        <span class="tipo">Saque</span>
+                        <input type="text" id="pos1" value="Jogador 1" maxlength="20">
+                    </div>
+                </div>
+
+                <div class="rede">
+                    <span>REDE</span>
+                </div>
+
+                <div class="lado lado-b">
+                    <div class="jogador adversario">
+                        <span class="numero">4</span>
+                        <span class="tipo">Bloqueio</span>
+                        <span class="nome-adversario">Adversário 4</span>
+                    </div>
+
+                    <div class="jogador adversario">
+                        <span class="numero">3</span>
+                        <span class="tipo">Meio</span>
+                        <span class="nome-adversario">Adversário 3</span>
+                    </div>
+
+                    <div class="jogador adversario">
+                        <span class="numero">2</span>
+                        <span class="tipo">Ataque</span>
+                        <span class="nome-adversario">Adversário 2</span>
+                    </div>
+
+                    <div class="jogador adversario">
+                        <span class="numero">5</span>
+                        <span class="tipo">Defesa</span>
+                        <span class="nome-adversario">Adversário 5</span>
+                    </div>
+
+                    <div class="jogador adversario">
+                        <span class="numero">6</span>
+                        <span class="tipo">Defesa</span>
+                        <span class="nome-adversario">Adversário 6</span>
+                    </div>
+
+                    <div class="jogador adversario">
+                        <span class="numero">1</span>
+                        <span class="tipo">Saque</span>
+                        <span class="nome-adversario">Adversário 1</span>
+                    </div>
+                </div>
+
+                <div id="bola" class="bola" aria-label="Bola de vôlei">🏐</div>
+            </div>
+        </section>
+
+        <section class="mensagem">
+            <div id="resultado" class="resultado">
+                🏐 Aguardando o início da jogada...
+            </div>
+        </section>
+
+        <section class="painel-controles">
+            <div class="titulo-controles">
+                <h2>🎮 Jogadas</h2>
+                <span>Atalhos: S, D, L, A, B, R</span>
+            </div>
+
+            <div class="botoes">
+                <button id="btnSaque" class="btn btn-saque">🏐 Saque</button>
+                <button id="btnDefesa" class="btn btn-defesa">👏 Defesa</button>
+                <button id="btnLevantamento" class="btn btn-levantamento">🎯 Levantamento</button>
+                <button id="btnAtaque" class="btn btn-ataque">🔥 Ataque</button>
+                <button id="btnBloqueio" class="btn btn-bloqueio">🛡️ Bloqueio</button>
+                <button id="btnRodizio" class="btn btn-rodizio">🔄 Rodízio</button>
+            </div>
+        </section>
+
+        <section class="historico-container">
+            <div class="historico-header">
+                <h2>📜 Histórico</h2>
+                <button id="btnLimparHistorico" class="btn btn-pequeno">Limpar</button>
+            </div>
+
+            <ul id="historico" aria-live="polite"></ul>
+        </section>
+
+        <section class="regras">
+            <h2>📖 Como jogar</h2>
+
+            <div class="regras-grid">
+                <div>
+                    <strong>1️⃣ Saque</strong>
+                    <p>Comece o rally com um saque firme e organizado.</p>
+                </div>
+
+                <div>
+                    <strong>2️⃣ Defesa</strong>
+                    <p>Receba com segurança e estabilize o jogo.</p>
+                </div>
+
+                <div>
+                    <strong>3️⃣ Levantamento</strong>
+                    <p>Prepare a jogada para a ação final do ataque.</p>
+                </div>
+
+                <div>
+                    <strong>4️⃣ Ataque</strong>
+                    <p>Finalize o ponto com força e precisão.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>🏐 Desafio do Vôlei — Simulador educativo</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
